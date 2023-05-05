@@ -14,5 +14,5 @@ public interface CourseService {
     
     public Set<Course> coursesByStudentId(long studentId) throws Exception;
 
-    public Course enrolInCourse(int studentId, int courseId) throws Exception;
+    public String enrolInCourse(int studentId, int courseId) throws Exception;
 }

@@ -11,7 +11,7 @@ public interface StudentService {
     public void updateStudent (Student student) throws Exception;
     public List<Student> getAllStudents();
 
-    public Optional<Student> login(String emailId, String password);
+    public Optional<Student> login(String emailId, String password) throws Exception;
 
     public boolean canGraduate(int id);
 }

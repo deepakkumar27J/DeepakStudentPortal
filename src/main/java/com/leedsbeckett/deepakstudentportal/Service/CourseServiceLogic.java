@@ -5,15 +5,16 @@ import com.leedsbeckett.deepakstudentportal.Model.Student;
 import com.leedsbeckett.deepakstudentportal.Repository.CourseRepository;
 import com.leedsbeckett.deepakstudentportal.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 
 @Service
 public class CourseServiceLogic implements CourseService {
@@ -50,8 +51,8 @@ public class CourseServiceLogic implements CourseService {
     }
 
     @Override
-    public Course enrolInCourse(int studentId, int courseId) throws Exception {
-        Course course = studentRepository.findById(studentId).map(student->{
+    public String enrolInCourse(int studentId, int courseId) throws Exception {
+        String course = studentRepository.findById(studentId).map(student->{
             boolean ifCourseExist = courseRepository.existsById((long) courseId);
             if(ifCourseExist==false) {
                 try {
@@ -61,15 +62,22 @@ public class CourseServiceLogic implements CourseService {
                 }
             }
             Course currentCourse =courseRepository.findById((long) courseId);
-            if(courseId!=0L){
-                Course _course = courseDetail(Math.toIntExact(courseId));
-                student.addCourse(_course);
-                studentRepository.save(student);
-                return _course;
-            }
+            Course _course = courseDetail(Math.toIntExact(courseId));
 
-            student.addCourse(currentCourse);
-            return courseRepository.save(currentCourse);
+            // Create Invoice
+            String uri = "http://localhost:8081/invoice";
+            RestTemplate restTemplate = new RestTemplate();
+            Invoice _invoice = new Invoice(_course.getCost(), "Course", student.getEmailId());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity entity = new HttpEntity(_invoice, headers);
+            ResponseEntity<String> out = restTemplate.exchange(uri, HttpMethod.POST, entity
+                    , String.class);
+            System.out.print(out.getBody());
+            // Invoice Created
+            student.addCourse(_course);
+            studentRepository.save(student);
+            return out.getBody();
         }).orElseThrow(()-> new Exception("No student with id = "+studentId));
 
         return course;

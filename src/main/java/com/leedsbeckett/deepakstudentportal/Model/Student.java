@@ -1,5 +1,6 @@
 package com.leedsbeckett.deepakstudentportal.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -54,6 +55,7 @@ public class Student {
     @Column(
             name = "password"
     )
+//    @JsonIgnore
     private String password;
     @Column(
             name = "phone_number"
@@ -160,17 +162,11 @@ public class Student {
     }
 
 
-//    public Student(final long id, final long studentId, final Integer yearIntake, final float cgpa, final boolean DuesClear, final String firstName, final String lastName, final String emailId, final Date dob, final String password, final String phoneNumber) {
-//        this.id = id;
-//        this.studentId = studentId;
-//        this.yearIntake = yearIntake;
-//        this.cgpa = cgpa;
-//        this.DuesClear = DuesClear;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.emailId = emailId;
-//        this.dob = dob;
-//        this.password = password;
-//        this.phoneNumber = phoneNumber;
-//    }
+    public Student(final String firstName, final String lastName, final String emailId, final String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.emailId = emailId;
+        this.password = password;
+    }
+
 }

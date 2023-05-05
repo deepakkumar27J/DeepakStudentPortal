@@ -33,7 +33,7 @@ public class StudentController {
     }
 
     @PostMapping("/login")
-    public Optional<Student> loginStudent(@RequestBody Student loginDTO) {
+    public Optional<Student> loginStudent(@RequestBody Student loginDTO) throws Exception {
         System.out.print(loginDTO.getEmailId() + loginDTO.getPassword());
         Optional<Student> student = studentService.login(loginDTO.getEmailId(), loginDTO.getPassword());
         return student;

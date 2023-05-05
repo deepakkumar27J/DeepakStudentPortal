@@ -44,8 +44,8 @@ public class CourseController {
     }
 
     @PostMapping("/enrolCourse/{studentId}/{courseId}")
-    public ResponseEntity<Course> addCourse (@PathVariable(value="studentId") int studentId,@PathVariable(value="courseId") int courseId) throws Exception {
-        Course course = courseService.enrolInCourse(studentId, courseId);
+    public ResponseEntity<String> addCourse (@PathVariable(value="studentId") int studentId,@PathVariable(value="courseId") int courseId) throws Exception {
+        String course = courseService.enrolInCourse(studentId, courseId);
 
         return new ResponseEntity<>(course, HttpStatus.OK);
     }

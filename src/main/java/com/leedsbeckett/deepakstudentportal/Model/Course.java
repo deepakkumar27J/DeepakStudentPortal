@@ -73,6 +73,19 @@ public class Course {
     )
     private String description;
 
+    @Column(
+            name = "cost"
+    )
+    private int cost = 100;
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
     public Course() {
     }
 
