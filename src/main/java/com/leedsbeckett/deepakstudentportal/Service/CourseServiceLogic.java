@@ -61,8 +61,13 @@ public class CourseServiceLogic implements CourseService {
                     throw new RuntimeException(e);
                 }
             }
+            Set<Course> coursesAlready = student.getEnrolledCourses();
+
             Course currentCourse =courseRepository.findById((long) courseId);
             Course _course = courseDetail(Math.toIntExact(courseId));
+            if(coursesAlready.contains(currentCourse)){
+                return "{\"enrol\":\"true\"}";
+            }
 
             // Create Invoice
             String uri = "http://localhost:8081/invoice";

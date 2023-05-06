@@ -42,7 +42,6 @@ public class StudentServiceLogic implements StudentService {
             throw new HttpMessageNotReadableException("Student already existing.");
         }
         String newPassword = this.md5Password(student.getPassword());
-        student.setPassword(String.valueOf(newPassword));
 
 
         // Creating Account on Finance Portal
@@ -55,6 +54,8 @@ public class StudentServiceLogic implements StudentService {
         String uriLibrary="http://localhost:8082/student/create";
         Student _libraryStudent = new Student(student.getFirstName(), student.getLastName(), student.getEmailId(), student.getPassword());
         restTemplate.postForEntity(uriLibrary, _libraryStudent, String.class);
+
+        student.setPassword(String.valueOf(newPassword));
         return studentRepository.save(student);
 
     }
